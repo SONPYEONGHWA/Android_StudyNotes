@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="model"
+            type="com.example.daggerhiltstudy.model.UsersModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageview_profile"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            imageResourceId="@{model.ownerModel.avatar_url}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintWidth_percent="0.3" />
+
+        <TextView
+            android:id="@+id/textview_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="@{model.name}"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageview_profile"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
