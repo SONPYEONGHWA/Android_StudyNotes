@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/mapFragment">
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.mapservice.model.MapFragment"
+        android:label="MapFragment"
+        tools:layout="@layout/fragment_map">
+        <action
+            android:id="@+id/action_mapFragment_to_friendsListFragment"
+            app:destination="@id/friendsListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendsListFragment"
+        android:name="com.example.mapservice.model.FriendsListFragment"
+        android:label="FriendsListFragment"
+        tools:layout="@layout/fragment_friends_list">
+        <action
+            android:id="@+id/action_friendsListFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myPageFragment"
+        android:name="com.example.mapservice.model.MyPageFragment"
+        android:label="MyPageFragment"
+        tools:layout="@layout/fragment_my_page"/>
+
+</navigation>
