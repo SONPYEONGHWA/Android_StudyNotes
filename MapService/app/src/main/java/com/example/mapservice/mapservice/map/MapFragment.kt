@@ -1,14 +1,13 @@
-package com.example.mapservice.model
+package com.example.mapservice.mapservice.map
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import com.example.mapservice.R
+import androidx.fragment.app.Fragment
 import com.example.mapservice.databinding.FragmentMapBinding
+import com.example.mapservice.mapservice.MainActivity
+import net.daum.mf.map.api.MapView
 
 class MapFragment : Fragment() {
     private lateinit var binding: FragmentMapBinding
@@ -23,13 +22,12 @@ class MapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        goToFriendsListFragment()
+        initMapView()
     }
 
-    private fun goToFriendsListFragment() {
-        val navController = Navigation.findNavController(binding.root)
-        binding.buttonNext.setOnClickListener {
-            navController.navigate(R.id.action_mapFragment_to_friendsListFragment)
-        }
+    private fun initMapView() {
+        val mapView = MapView(context as MainActivity)
+        val mapViewContainer = binding.mapview
+        mapViewContainer.addView(mapView)
     }
 }

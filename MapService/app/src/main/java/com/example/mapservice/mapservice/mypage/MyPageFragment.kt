@@ -1,4 +1,4 @@
-package com.example.mapservice.model
+package com.example.mapservice.mapservice.mypage
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

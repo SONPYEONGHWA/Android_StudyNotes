@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="model"
+            type="com.example.mapservice.mapservice.websearch.model.SearchResponseModel.DocumentsModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <ImageView
+            android:id="@+id/imageview_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            setImageUrl="@{model.thumbnail}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1.6:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textview_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/apple_sd_gothic_neo_bold"
+            android:includeFontPadding="false"
+            android:textSize="20sp"
+            android:text="@{model.title}"
+            android:layout_marginTop="7dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/imageview_thumbnail"
+            app:layout_constraintTop_toBottomOf="@id/imageview_thumbnail" />
+
+        <TextView
+            android:id="@+id/textview_date_upload"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:text="@{model.datetime}"
+            android:fontFamily="@font/apple_sd_gothic_neo_medium"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="@id/textview_title"
+            app:layout_constraintTop_toBottomOf="@id/textview_title"
+            app:layout_constraintEnd_toEndOf="@id/textview_title"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

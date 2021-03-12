@@ -7,6 +7,7 @@
 
 
     <application
+        android:name=".mapservice.application.MapServiceApplication"
         android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,11 +15,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MapService">
-        <meta-data
-            android:name="com.kakao.Appkey"
-            android:value="520d7bf98da47c94caa26e97449e12bf"/>
 
-        <activity android:name=".model.MainActivity">
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="b6fd36460fac8ab90faf4098cc5ca49f"/>
+
+        <activity android:name=".mapservice.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

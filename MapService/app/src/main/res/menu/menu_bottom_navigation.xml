@@ -10,6 +10,10 @@
         android:icon="@drawable/friend_selector"
         android:title="Friend" />
     <item
+        android:id="@+id/webSearchFragment"
+        android:icon="@drawable/search_selector"
+        android:title="Search"/>
+    <item
         android:id="@+id/myPageFragment"
         android:icon="@drawable/mypage_selector"
         android:title="MyPage" />

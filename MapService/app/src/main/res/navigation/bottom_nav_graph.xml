@@ -8,26 +8,23 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.example.mapservice.model.MapFragment"
+        android:name="com.example.mapservice.mapservice.map.MapFragment"
         android:label="MapFragment"
-        tools:layout="@layout/fragment_map">
-        <action
-            android:id="@+id/action_mapFragment_to_friendsListFragment"
-            app:destination="@id/friendsListFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_map"/>
     <fragment
         android:id="@+id/friendsListFragment"
-        android:name="com.example.mapservice.model.FriendsListFragment"
+        android:name="com.example.mapservice.mapservice.friendslist.ui.FriendsListFragment"
         android:label="FriendsListFragment"
-        tools:layout="@layout/fragment_friends_list">
-        <action
-            android:id="@+id/action_friendsListFragment_to_myPageFragment"
-            app:destination="@id/myPageFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_friends_list"/>
     <fragment
         android:id="@+id/myPageFragment"
-        android:name="com.example.mapservice.model.MyPageFragment"
+        android:name="com.example.mapservice.mapservice.mypage.MyPageFragment"
         android:label="MyPageFragment"
         tools:layout="@layout/fragment_my_page"/>
+    <fragment
+        android:id="@+id/webSearchFragment"
+        android:name="com.example.mapservice.mapservice.websearch.ui.WebSearchFragment"
+        android:label="fragment_web_search"
+        tools:layout="@layout/fragment_web_search" />
 
 </navigation>
