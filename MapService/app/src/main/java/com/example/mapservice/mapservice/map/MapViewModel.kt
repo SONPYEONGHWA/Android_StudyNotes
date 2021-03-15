@@ -13,6 +13,7 @@ import com.example.mapservice.mapservice.application.MapServiceApplication
 import com.example.mapservice.mapservice.utils.PermissionUtility
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
 import java.io.IOException
 import java.util.*
 
@@ -32,30 +33,69 @@ class MapViewModel @ViewModelInject constructor(
     val resultList: LiveData<List<Address>>
         get() = _resultList
 
-    private val _currentLatLng = MutableLiveData<Location>()
-    val currentLatLng: LiveData<Location>
-        get() = _currentLatLng
+    private val _currentLocation = MutableLiveData<String>()
+    val currentLocation: LiveData<String>
+    get() = _currentLocation
 
-    fun changeCurrentLatLng(location: Location?) {
-        _currentLatLng.value = location
+    var mLocationListener: LocationListener? = null
+
+    fun getLocation(mapView: MapView) {
+        mLocationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                if (location != null) {
+                    _latitude.value = location.latitude
+                    _longtitude.value = location.longitude
+                    getAddress()
+                    Log.e("Your Location: ", "${latitude.value}, ${longtitude.value}")
+                }
+
+                markOnMap(mapView)
+            }
+
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                super.onStatusChanged(provider, status, extras)
+            }
+
+            override fun onProviderEnabled(provider: String) {
+                super.onProviderEnabled(provider)
+            }
+
+            override fun onProviderDisabled(provider: String) {
+                super.onProviderDisabled(provider)
+            }
+        }
+    }
+
+    fun getAddress() {
+        try{
+            _resultList.value =
+                geocoder.getFromLocation(
+                latitude.value!!,
+                    longtitude.value!!,
+                    1
+            )
+        } catch (e: IOException){
+            e.printStackTrace()
+        }
+
+        if (resultList.value != null) {
+            _currentLocation.value = resultList.value!![0].getAddressLine(0)
+        }
     }
 
 
-    fun getLocation(userLocation: Location?) {
-        if (userLocation != null) {
-            _latitude.value = userLocation.latitude
-            _longtitude.value = userLocation.longitude
-
-            try {
-                _resultList.value = geocoder.getFromLocation(
-                    latitude.value!!, longtitude.value!!, 1
-                )
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            if (resultList != null) {
-                Log.d("CheckCurrentLocation", resultList.value!![0].getAddressLine(0))
-            }
-        }
+    fun markOnMap(mapView: MapView) {
+        mapView.removeAllPOIItems()
+        val marker = MapPOIItem()
+        marker.itemName = currentLocation.value
+        marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude.value!!, longtitude.value!!)
+        marker.markerType = MapPOIItem.MarkerType.BluePin
+        mapView.addPOIItem(marker)
+        mapView.setMapCenterPoint(
+            MapPoint.mapPointWithGeoCoord(
+                latitude.value!!,
+               longtitude.value!!
+            ), true
+        )
     }
 }

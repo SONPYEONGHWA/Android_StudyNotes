@@ -60,40 +60,25 @@ class MapFragment : Fragment() {
     }
 
     private fun markCurrentLocation() {
-        val marker = MapPOIItem()
-
         binding.buttonMyLocation.setOnClickListener {
-            viewModel.getLocation(getLatLng())
-
-            viewModel.currentLatLng.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-                marker.itemName = viewModel.resultList.value!![0].getAddressLine(0)
-                marker.mapPoint = MapPoint.mapPointWithGeoCoord(
-                    viewModel.latitude.value!!,
-                    viewModel.longtitude.value!!
-                )
-                marker.markerType = MapPOIItem.MarkerType.BluePin
-                mapView.addPOIItem(marker)
-                mapView.setMapCenterPoint(
-                    MapPoint.mapPointWithGeoCoord(
-                        viewModel.latitude.value!!,
-                        viewModel.longtitude.value!!
-                    ), true
-                )
-            }
-            )
+            getLatLng()
         }
     }
 
     @SuppressLint("MissingPermission")
-    private fun getLatLng(): Location? {
-        viewModel.changeCurrentLatLng(null)
+    private fun getLatLng() {
+        viewModel.getLocation(mapView)
         locationManager =
             requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         if (PermissionUtility.checkLocationPermissions(mContext)) {
-            var locationProvider = LocationManager.GPS_PROVIDER
-
-            viewModel.changeCurrentLatLng(locationManager?.getLastKnownLocation(locationProvider))
+            locationManager!!.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                3000L,
+                30f,
+                viewModel.mLocationListener!!
+            )
+            viewModel.getLocation(mapView)
         } else {
             Toast.makeText(mContext, "위치 접근 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
             ActivityCompat.requestPermissions(
@@ -101,8 +86,7 @@ class MapFragment : Fragment() {
                 REQUIRED_PERMISSIONS,
                 PERMISSIONS_REQUEST_CODE
             )
-            viewModel.changeCurrentLatLng(getLatLng())
+            viewModel.getLocation(mapView)
         }
-        return viewModel.currentLatLng.value
     }
 }
