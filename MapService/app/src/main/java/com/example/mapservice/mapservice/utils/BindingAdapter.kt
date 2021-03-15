@@ -2,6 +2,7 @@ package com.example.mapservice.mapservice
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -32,4 +33,13 @@ fun setTextWatcher(view: EditText, textAttrChanged: InverseBindingListener) {
             textAttrChanged.onChange()
         }
     })
+}
+
+@BindingAdapter("isGone")
+fun bindIsGone(view: View, isGone: Boolean) {
+    view.visibility = if (isGone) {
+        View.GONE
+    } else {
+        View.VISIBLE
+    }
 }
