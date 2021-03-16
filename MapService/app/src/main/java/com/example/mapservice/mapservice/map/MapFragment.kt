@@ -2,10 +2,8 @@ package com.example.mapservice.mapservice.map
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
 import android.location.*
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,20 +11,14 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.example.mapservice.databinding.FragmentMapBinding
-import com.example.mapservice.mapservice.MainActivity
-import com.example.mapservice.mapservice.application.MapServiceApplication
 import com.example.mapservice.mapservice.utils.PermissionUtility
 import com.example.mapservice.mapservice.utils.PermissionUtility.REQUIRED_PERMISSIONS
-import dagger.hilt.android.AndroidEntryPoint
-import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
-import java.io.IOException
-import java.util.*
 
-@AndroidEntryPoint
-class MapFragment : Fragment() {
+class MapFragment: Fragment() {
     private lateinit var binding: FragmentMapBinding
     private lateinit var mapView: MapView
     private val viewModel: MapViewModel by activityViewModels()
@@ -67,18 +59,18 @@ class MapFragment : Fragment() {
 
     @SuppressLint("MissingPermission")
     private fun getLatLng() {
-        viewModel.getLocation(mapView)
+        viewModel.getLocation()
         locationManager =
             requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
         if (PermissionUtility.checkLocationPermissions(mContext)) {
             locationManager!!.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
+                LocationManager.NETWORK_PROVIDER,
                 3000L,
                 30f,
                 viewModel.mLocationListener!!
             )
-            viewModel.getLocation(mapView)
+            viewModel.getLocation()
+            markOnMap()
         } else {
             Toast.makeText(mContext, "위치 접근 권한이 필요합니다.", Toast.LENGTH_SHORT).show()
             ActivityCompat.requestPermissions(
@@ -86,7 +78,20 @@ class MapFragment : Fragment() {
                 REQUIRED_PERMISSIONS,
                 PERMISSIONS_REQUEST_CODE
             )
-            viewModel.getLocation(mapView)
+            getLatLng()
         }
+    }
+
+    private fun markOnMap() {
+        viewModel.currentLocation.observe(viewLifecycleOwner, Observer {
+            mapView.removeAllPOIItems()
+            mapView.addPOIItem(viewModel.setMarker())
+            mapView.setMapCenterPoint(
+                MapPoint.mapPointWithGeoCoord(
+                    viewModel.latitude.value!!,
+                    viewModel.longtitude.value!!
+                ), true
+            )
+        })
     }
 }

@@ -9,8 +9,10 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.mapservice.mapservice.application.MapServiceApplication
 import com.example.mapservice.mapservice.utils.PermissionUtility
+import kotlinx.coroutines.launch
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -39,29 +41,30 @@ class MapViewModel @ViewModelInject constructor(
 
     var mLocationListener: LocationListener? = null
 
-    fun getLocation(mapView: MapView) {
-        mLocationListener = object : LocationListener {
-            override fun onLocationChanged(location: Location) {
-                if (location != null) {
-                    _latitude.value = location.latitude
-                    _longtitude.value = location.longitude
-                    getAddress()
-                    Log.e("Your Location: ", "${latitude.value}, ${longtitude.value}")
+    fun getLocation() {
+        viewModelScope.launch {
+            mLocationListener = object : LocationListener {
+                override fun onLocationChanged(location: Location) {
+                    if (location != null) {
+                        _latitude.value = location.latitude
+                        _longtitude.value = location.longitude
+                        getAddress()
+                        Log.e("Your Location: ", "${latitude.value}, ${longtitude.value}")
+                    }
+                    setMarker()
                 }
 
-                markOnMap(mapView)
-            }
+                override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                    super.onStatusChanged(provider, status, extras)
+                }
 
-            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-                super.onStatusChanged(provider, status, extras)
-            }
+                override fun onProviderEnabled(provider: String) {
+                    super.onProviderEnabled(provider)
+                }
 
-            override fun onProviderEnabled(provider: String) {
-                super.onProviderEnabled(provider)
-            }
-
-            override fun onProviderDisabled(provider: String) {
-                super.onProviderDisabled(provider)
+                override fun onProviderDisabled(provider: String) {
+                    super.onProviderDisabled(provider)
+                }
             }
         }
     }
@@ -83,19 +86,12 @@ class MapViewModel @ViewModelInject constructor(
         }
     }
 
-
-    fun markOnMap(mapView: MapView) {
-        mapView.removeAllPOIItems()
+    fun setMarker(): MapPOIItem {
         val marker = MapPOIItem()
-        marker.itemName = currentLocation.value
+        marker.itemName =currentLocation.value
         marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude.value!!, longtitude.value!!)
         marker.markerType = MapPOIItem.MarkerType.BluePin
-        mapView.addPOIItem(marker)
-        mapView.setMapCenterPoint(
-            MapPoint.mapPointWithGeoCoord(
-                latitude.value!!,
-               longtitude.value!!
-            ), true
-        )
+        return marker
     }
+
 }
