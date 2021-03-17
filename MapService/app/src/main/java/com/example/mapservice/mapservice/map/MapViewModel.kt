@@ -1,7 +1,5 @@
 package com.example.mapservice.mapservice.map
 
-import android.app.Activity
-import android.content.Context
 import android.location.*
 import android.os.Bundle
 import android.util.Log
@@ -9,15 +7,9 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.mapservice.mapservice.application.MapServiceApplication
-import com.example.mapservice.mapservice.utils.PermissionUtility
-import kotlinx.coroutines.launch
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
-import net.daum.mf.map.api.MapView
 import java.io.IOException
-import java.util.*
 
 class MapViewModel @ViewModelInject constructor(
     val geocoder: Geocoder
@@ -37,61 +29,95 @@ class MapViewModel @ViewModelInject constructor(
 
     private val _currentLocation = MutableLiveData<String>()
     val currentLocation: LiveData<String>
-    get() = _currentLocation
+        get() = _currentLocation
 
-    var mLocationListener: LocationListener? = null
+    private val _locationResultSearched = MutableLiveData<List<AddressModel>>()
+    val locationResultSearched: LiveData<List<AddressModel>>
+        get() = _locationResultSearched
 
-    fun getLocation() {
-        viewModelScope.launch {
-            mLocationListener = object : LocationListener {
-                override fun onLocationChanged(location: Location) {
-                    if (location != null) {
-                        _latitude.value = location.latitude
-                        _longtitude.value = location.longitude
-                        getAddress()
-                        Log.e("Your Location: ", "${latitude.value}, ${longtitude.value}")
-                    }
-                    setMarker()
+    private val _locationSelected = MutableLiveData<AddressModel>()
+    val locationSelected: LiveData<AddressModel>
+        get() = _locationSelected
+
+    val searchAddressQuery = MutableLiveData<String>()
+
+    fun changeResultList(list: List<Address>) {
+        _resultList.value = list
+    }
+
+    fun changeLocaitonResult(list: List<AddressModel>) {
+        _locationResultSearched.value = list
+    }
+
+    fun changeLocationSelected(address: AddressModel) {
+        _locationSelected.value = address
+    }
+
+    fun changeLatitude(latitude: Double) {
+        _latitude.value = latitude
+    }
+
+    fun changeLongtitude(longtitude: Double) {
+        _longtitude.value = longtitude
+    }
+
+    fun changeCurrentLocation(location: String) {
+        _currentLocation.value = location
+    }
+
+    fun getLocation(): LocationListener {
+        val mLocationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                if (location != null) {
+                    _latitude.value = location.latitude
+                    _longtitude.value = location.longitude
+                    getAddress()
+                    Log.e("Your Location: ", "${latitude.value}, ${longtitude.value}")
                 }
+                setMarker()
+            }
 
-                override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
-                    super.onStatusChanged(provider, status, extras)
-                }
-
-                override fun onProviderEnabled(provider: String) {
-                    super.onProviderEnabled(provider)
-                }
-
-                override fun onProviderDisabled(provider: String) {
-                    super.onProviderDisabled(provider)
-                }
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                super.onStatusChanged(provider, status, extras)
             }
         }
+        return mLocationListener
     }
 
     fun getAddress() {
-        try{
-            _resultList.value =
+        try {
+
+            changeResultList(
                 geocoder.getFromLocation(
-                latitude.value!!,
+                    latitude.value!!,
                     longtitude.value!!,
                     1
+                )
             )
-        } catch (e: IOException){
+        } catch (e: IOException) {
             e.printStackTrace()
         }
 
-        if (resultList.value != null) {
-            _currentLocation.value = resultList.value!![0].getAddressLine(0)
+        if (resultList?.value != null) {
+            _currentLocation.value = resultList?.value!![0].getAddressLine(0)
         }
     }
 
     fun setMarker(): MapPOIItem {
         val marker = MapPOIItem()
-        marker.itemName =currentLocation.value
+        marker.itemName = currentLocation.value
         marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude.value!!, longtitude.value!!)
         marker.markerType = MapPOIItem.MarkerType.BluePin
         return marker
     }
 
+    fun searchAddress(string: String) {
+        try {
+            changeResultList(geocoder.getFromLocationName(string, 10))
+            Log.e("result :", resultList?.value.toString())
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
 }

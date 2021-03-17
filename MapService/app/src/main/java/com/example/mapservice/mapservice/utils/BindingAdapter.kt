@@ -17,8 +17,15 @@ fun setImageUrl(imageview: ImageView, url: String?) {
         .into(imageview)
 }
 
+@BindingAdapter("android:text")
+fun getTextString(view: EditText, contet: String?) {
+    var old: String? = view.text.toString()
+    if (old != contet) view.setText(contet)
+}
+
+
 @InverseBindingAdapter(attribute = "android:text", event = "textAttrChanged")
-fun getTextString(editText: EditText): String {
+fun getTextString(editText: EditText): String? {
     return editText.text.toString()
 }
 
@@ -30,7 +37,7 @@ fun setTextWatcher(view: EditText, textAttrChanged: InverseBindingListener) {
         override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
         override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            textAttrChanged.onChange()
+            textAttrChanged?.onChange()
         }
     })
 }
