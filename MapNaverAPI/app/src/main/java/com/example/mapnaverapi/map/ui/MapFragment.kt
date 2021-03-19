@@ -32,6 +32,8 @@ class MapFragment : BaseFragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMapBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         mapView = binding.mapview
         mapView.onCreate(savedInstanceState)
@@ -42,6 +44,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requirePermissions(permissions, LOCATION_PERMISSION_REQUEST_CODE)
         marker = Marker()
         findLocation()
         findMyLocation()
@@ -53,6 +56,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     override fun permissionGranted(requestCode: Int) {
+        findMyLocation()
     }
 
     override fun permissionDenied(requestCode: Int) {
@@ -60,7 +64,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun findMyLocation() {
-        requirePermissions(permissions, LOCATION_PERMISSION_REQUEST_CODE)
         viewModel.getLocationData().observe(viewLifecycleOwner, Observer{location ->
             binding.buttonMyLocation.setOnClickListener {
                 marker.map = null
@@ -74,7 +77,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun findLocation() {
         binding.buttonSearchAddress.setOnClickListener {
-            viewModel.searchLocation(binding.edittextSearchAddress.text.toString())
+            viewModel.searchLocation()
             if (viewModel.locationListSearched.value.isNullOrEmpty()) {
                 Toast.makeText(requireContext(), "검색결과가 없습니다.", Toast.LENGTH_SHORT).show()
             } else {
@@ -96,7 +99,6 @@ class MapFragment : BaseFragment(), OnMapReadyCallback {
             val cameraUpdate = CameraUpdate.scrollTo(marker.position).animate(CameraAnimation.Easing)
             marker.map = naverMap
             naverMap.moveCamera(cameraUpdate)
-            Log.e("update", it.address)
         })
     }
 

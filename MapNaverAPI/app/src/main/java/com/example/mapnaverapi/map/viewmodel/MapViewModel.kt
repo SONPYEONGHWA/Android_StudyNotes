@@ -41,11 +41,10 @@ val geocoder: Geocoder) : ViewModel() {
     }
 
 
-    fun searchLocation(string: String) {
+    fun searchLocation() {
         viewModelScope.launch {
             _locationListSearched.value =
-                geocoder.getFromLocationName(string,15)
-            Log.e("ggg", locationListSearched.toString())
+                geocoder.getFromLocationName(locationSearched.value,15)
         }
     }
 }
