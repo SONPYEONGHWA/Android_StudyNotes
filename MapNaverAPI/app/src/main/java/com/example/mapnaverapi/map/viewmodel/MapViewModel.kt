@@ -1,4 +1,4 @@
-package com.example.mapnaverapi.map
+package com.example.mapnaverapi.map.viewmodel
 
 import android.content.Context
 import android.location.Address
@@ -6,6 +6,8 @@ import android.location.Geocoder
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
+import com.example.mapnaverapi.map.model.LocationLiveData
+import com.example.mapnaverapi.map.model.AddressModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 

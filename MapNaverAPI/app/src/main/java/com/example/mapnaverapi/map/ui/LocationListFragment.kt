@@ -1,13 +1,15 @@
-package com.example.mapnaverapi.map
+package com.example.mapnaverapi.map.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.example.mapnaverapi.R
 import com.example.mapnaverapi.databinding.FragmentLocationListBinding
+import com.example.mapnaverapi.map.adapter.LocationListAdapter
+import com.example.mapnaverapi.map.model.AddressModel
+import com.example.mapnaverapi.map.viewmodel.MapViewModel
 import com.example.mapnaverapi.util.VerticalItemDecoration
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 

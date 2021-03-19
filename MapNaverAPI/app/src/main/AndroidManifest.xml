@@ -20,7 +20,7 @@
             android:value="@string/naver_client_id"/>
 
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".map.adapter.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

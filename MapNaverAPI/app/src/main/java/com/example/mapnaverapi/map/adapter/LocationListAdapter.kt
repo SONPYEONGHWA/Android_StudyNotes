@@ -1,4 +1,4 @@
-package com.example.mapnaverapi.map
+package com.example.mapnaverapi.map.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mapnaverapi.BR
 import com.example.mapnaverapi.databinding.ItemLocationListBinding
+import com.example.mapnaverapi.map.model.AddressModel
 
 class LocationListAdapter(val listener: (AddressModel) -> Unit): RecyclerView.Adapter<LocationListAdapter.LocationListViewHolder>() {
 

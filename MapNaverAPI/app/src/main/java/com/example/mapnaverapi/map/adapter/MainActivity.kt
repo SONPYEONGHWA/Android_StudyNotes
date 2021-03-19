@@ -1,7 +1,8 @@
-package com.example.mapnaverapi
+package com.example.mapnaverapi.map.adapter
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.mapnaverapi.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

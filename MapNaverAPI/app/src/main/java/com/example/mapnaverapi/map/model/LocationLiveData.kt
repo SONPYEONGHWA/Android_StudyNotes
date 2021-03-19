@@ -1,4 +1,4 @@
-package com.example.mapnaverapi.map
+package com.example.mapnaverapi.map.model
 
 import android.annotation.SuppressLint
 import android.content.Context

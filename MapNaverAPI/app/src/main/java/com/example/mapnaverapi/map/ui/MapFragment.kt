@@ -1,23 +1,21 @@
-package com.example.mapnaverapi.map
+package com.example.mapnaverapi.map.ui
 
 import android.Manifest
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.example.mapnaverapi.base.BaseFragment
 import com.example.mapnaverapi.databinding.FragmentMapBinding
+import com.example.mapnaverapi.map.viewmodel.MapViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MapFragment : BaseFragment(), OnMapReadyCallback {
