@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="model"
+            type="com.example.rxjavasample.searchmovie.model.MovieResponseModel.Item" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintlayout_item_movie"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageview_thumbnail"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            setImageUrl="@{model.image}"
+            app:layout_constraintWidth_percent="0.3"
+            app:layout_constraintDimensionRatio="1:1.5"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/textview_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:text="@{model.title}"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/apple_sd_gothic_neo_bold"
+            android:includeFontPadding="false"
+            android:inputType="text"
+            app:layout_constraintTop_toTopOf="@id/imageview_thumbnail"
+            app:layout_constraintStart_toEndOf="@id/imageview_thumbnail"
+            tools:text="Title of movie"/>
+
+        <TextView
+            android:id="@+id/texview_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:text="@{model.subtitle}"
+            android:fontFamily="@font/apple_sd_gothic_neo_bold"
+            android:includeFontPadding="false"
+            android:layout_marginTop="15dp"
+            app:layout_constraintStart_toStartOf="@id/textview_title"
+            app:layout_constraintTop_toBottomOf="@id/textview_title"
+            tools:text="Description of movie"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
