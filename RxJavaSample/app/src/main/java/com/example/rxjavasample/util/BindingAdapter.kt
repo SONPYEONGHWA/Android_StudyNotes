@@ -9,8 +9,10 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
+import androidx.databinding.InverseBindingMethod
 import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
+import com.google.android.material.chip.ChipGroup
 
 @BindingAdapter("setImageUrl")
 fun setImageUrl(imageView: ImageView, url: String) {
@@ -45,3 +47,4 @@ fun setTextWatcher(editText: EditText, textAttrChanged: InverseBindingListener) 
 fun getTextString(editText: EditText): String? {
     return editText.text.toString()
 }
+

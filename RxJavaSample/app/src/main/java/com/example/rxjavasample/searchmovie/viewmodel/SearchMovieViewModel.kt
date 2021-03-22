@@ -21,11 +21,24 @@ class SearchMovieViewModel @ViewModelInject constructor(
 
     val searchQuery: MutableLiveData<String> = MutableLiveData<String>()
 
+    private val _genreMovie = MutableLiveData<Int>()
+    val genreMovie: LiveData<Int>
+        get() = _genreMovie
+
+    private val _country = MutableLiveData<String>()
+    val country: LiveData<String>
+    get() = _country
+
+    fun changeCountryFilter(country: String) {
+        _country.value = country
+    }
+
     @SuppressLint("CheckResult")
     fun getMovieList() {
         searchMovieRepository.getMovieList(
-            searchQuery.value!!
-        ).subscribeOn(Schedulers.io())
+            searchQuery.value!!,
+            country.value
+            ).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 _movieList.postValue(it)

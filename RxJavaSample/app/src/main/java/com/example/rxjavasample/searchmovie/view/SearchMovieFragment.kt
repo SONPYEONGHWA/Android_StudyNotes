@@ -37,6 +37,7 @@ class SearchMovieFragment : Fragment() {
 
         initView()
         searchMovie()
+        setCountryFilter()
     }
 
     private fun initView() {
@@ -54,6 +55,12 @@ class SearchMovieFragment : Fragment() {
                 movieListAdapter.submitList(viewModel.movieList.value!!.items)
                 Log.e("movie list", "movie list")
             })
+        }
+    }
+
+    private fun setCountryFilter() {
+        binding.textviewFilterCountry.setOnClickListener {
+            MovieFilterDialogFragment().show(childFragmentManager, "FilterDialog")
         }
     }
 }
