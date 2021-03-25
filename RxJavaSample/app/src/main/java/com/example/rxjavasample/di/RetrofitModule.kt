@@ -3,7 +3,7 @@ package com.example.rxjavasample.di
 
 import com.example.rxjavasample.BuildConfig
 import com.example.rxjavasample.util.Constants
-import com.example.rxjavasample.searchmovie.api.SearchMovieService
+import com.example.rxjavasample.searchmovie.remote.api.SearchMovieService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

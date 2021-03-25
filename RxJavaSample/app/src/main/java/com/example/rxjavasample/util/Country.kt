@@ -1,7 +1,7 @@
-package com.example.rxjavasample.searchmovie.model
+package com.example.rxjavasample.util
 
 enum class Country(
-    val code: String
+  val code: String
 ) {
     KOREA("KR"),
     JAPAN("JP"),
@@ -11,3 +11,4 @@ enum class Country(
     FRANCE("FR"),
     ETC("ETC");
 }
+

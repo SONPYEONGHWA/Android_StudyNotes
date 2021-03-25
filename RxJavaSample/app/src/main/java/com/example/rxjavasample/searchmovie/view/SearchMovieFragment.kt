@@ -1,15 +1,16 @@
 package com.example.rxjavasample.searchmovie.view
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.example.rxjavasample.databinding.FragmentSearchMovieBinding
 import com.example.rxjavasample.searchmovie.adapter.MovieListAdapter
+import com.example.rxjavasample.searchmovie.adapter.SearchHistoryAdapter
+import com.example.rxjavasample.searchmovie.remote.model.MovieResponseModel
 import com.example.rxjavasample.searchmovie.viewmodel.SearchMovieViewModel
 import com.example.rxjavasample.util.VerticalItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,6 +21,7 @@ class SearchMovieFragment : Fragment() {
     private lateinit var binding: FragmentSearchMovieBinding
     private val viewModel: SearchMovieViewModel by activityViewModels()
     private lateinit var movieListAdapter: MovieListAdapter
+    private lateinit var searchHistoryAdapter: SearchHistoryAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,14 +40,19 @@ class SearchMovieFragment : Fragment() {
         initView()
         searchMovie()
         setCountryFilter()
+        loadSearchHistory()
     }
 
     private fun initView() {
-        movieListAdapter = MovieListAdapter {
-            Log.d("item click", "item click")
+        searchHistoryAdapter = SearchHistoryAdapter()
+        movieListAdapter = MovieListAdapter { item ->
+            openMovieUrl(item)
         }
+
         binding.recyclerviewNews.adapter = movieListAdapter
         binding.recyclerviewNews.addItemDecoration(VerticalItemDecoration(10))
+        binding.recyclerviewSearchHistory.adapter = searchHistoryAdapter
+        binding.recyclerviewSearchHistory.addItemDecoration(VerticalItemDecoration(5))
     }
 
     private fun searchMovie() {
@@ -53,14 +60,40 @@ class SearchMovieFragment : Fragment() {
             viewModel.getMovieList()
             viewModel.movieList.observe(viewLifecycleOwner, Observer {
                 movieListAdapter.submitList(viewModel.movieList.value!!.items)
-                Log.e("movie list", "movie list")
             })
+            binding.edittextSearchNews.clearFocus()
         }
     }
 
     private fun setCountryFilter() {
         binding.textviewFilterCountry.setOnClickListener {
             MovieFilterDialogFragment().show(childFragmentManager, "FilterDialog")
+        }
+    }
+
+    private fun openMovieUrl(item: MovieResponseModel.Item) {
+        requireActivity().run {
+            val url = Intent(Intent.ACTION_VIEW, Uri.parse(item.link))
+            startActivity(url, null)
+        }
+    }
+
+    private fun loadSearchHistory() {
+        viewModel.queryList.observe(viewLifecycleOwner, Observer {
+            if (!viewModel.queryList.value.isNullOrEmpty()) {
+                detectFocus()
+            }
+        })
+    }
+
+    private fun  detectFocus() {
+        binding.edittextSearchNews.setOnFocusChangeListener{view, hasFocus ->
+            if (hasFocus) {
+                binding.recyclerviewSearchHistory.visibility = View.VISIBLE
+                searchHistoryAdapter.submitList(viewModel.queryList.value!!)
+            } else {
+                binding.recyclerviewSearchHistory.visibility = View.GONE
+            }
         }
     }
 }

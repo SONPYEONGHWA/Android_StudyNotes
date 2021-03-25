@@ -1,4 +1,4 @@
-package com.example.rxjavasample.searchmovie.model
+package com.example.rxjavasample.searchmovie.remote.model
 
 data class MovieResponseModel(
     val lastBuildDate: String,

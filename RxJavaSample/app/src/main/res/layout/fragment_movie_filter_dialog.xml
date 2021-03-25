@@ -37,6 +37,7 @@
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_korea"
                     android:layout_width="wrap_content"
+                    app:checkedIcon="@null"
                     android:layout_height="wrap_content"
                     android:text="한국"
                     style="@style/Widget.MaterialComponents.Chip.Filter"/>
@@ -46,35 +47,46 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="일본"
+                    app:checkedIcon="@null"
                     style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_us"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:checkedIcon="@null"
                     android:text="미국"
                     style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_hongkong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:checkedIcon="@null"
                     android:text="홍콩"
                     style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_british"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:checkedIcon="@null"
                     android:text="영국"
                     style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_france"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:checkedIcon="@null"
                     android:text="프랑스"
                     style="@style/Widget.MaterialComponents.Chip.Filter"/>
+
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_etc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:checkedIcon="@null"
                     android:text="기타"
                     style="@style/Widget.MaterialComponents.Chip.Filter"/>
 

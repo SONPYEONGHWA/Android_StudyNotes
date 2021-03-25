@@ -8,7 +8,7 @@ import androidx.core.view.children
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.rxjavasample.databinding.FragmentMovieFilterDialogBinding
-import com.example.rxjavasample.searchmovie.model.Country
+import com.example.rxjavasample.util.Country
 import com.example.rxjavasample.searchmovie.viewmodel.SearchMovieViewModel
 import com.google.android.material.chip.Chip
 

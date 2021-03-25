@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rxjavasample.BR
 import com.example.rxjavasample.databinding.ItemMovieBinding
-import com.example.rxjavasample.searchmovie.model.MovieResponseModel
+import com.example.rxjavasample.searchmovie.remote.model.MovieResponseModel
 
 class MovieListAdapter(val listener: (MovieResponseModel.Item) -> Unit) :
     RecyclerView.Adapter<MovieListAdapter.MovieListViewHolder>() {

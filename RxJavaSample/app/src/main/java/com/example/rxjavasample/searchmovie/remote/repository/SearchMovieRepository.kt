@@ -1,8 +1,7 @@
-package com.example.rxjavasample.searchmovie.repository
+package com.example.rxjavasample.searchmovie.remote.repository
 
-import com.example.rxjavasample.searchmovie.api.SearchMovieService
-import com.example.rxjavasample.searchmovie.model.MovieResponseModel
-import io.reactivex.Observable
+import com.example.rxjavasample.searchmovie.remote.api.SearchMovieService
+import com.example.rxjavasample.searchmovie.remote.model.MovieResponseModel
 import io.reactivex.Single
 import javax.inject.Inject
 

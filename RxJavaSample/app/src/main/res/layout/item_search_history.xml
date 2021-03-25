@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="model"
+            type="com.example.rxjavasample.searchmovie.local.entity.SearchEntity" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+        <TextView
+            android:id="@+id/textview_query_searched"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/apple_sd_gothic_neo_medium"
+            android:inputType="text"
+            android:textSize="20sp"
+            android:text="@{model.searchQuery}"
+            app:layout_constraintEnd_toStartOf="@+id/imageview_delete"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="이전 검색기록" />
+
+        <ImageView
+            android:id="@+id/imageview_delete"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/button_close"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="@id/textview_query_searched"
+            app:layout_constraintBottom_toBottomOf="@id/textview_query_searched"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
