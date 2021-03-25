@@ -9,7 +9,7 @@ import com.example.rxjavasample.databinding.ItemSearchHistoryBinding
 import com.example.rxjavasample.searchmovie.local.entity.SearchEntity
 import com.example.rxjavasample.util.DiffUtil
 
-class SearchHistoryAdapter: RecyclerView.Adapter<SearchHistoryAdapter.SearchHistoryViewHolder>() {
+class SearchHistoryAdapter(val listener: (SearchEntity) -> Unit): RecyclerView.Adapter<SearchHistoryAdapter.SearchHistoryViewHolder>() {
 
     val diffUtil = DiffUtil<SearchEntity>()
     val differ = AsyncListDiffer(this, diffUtil)
@@ -25,7 +25,7 @@ class SearchHistoryAdapter: RecyclerView.Adapter<SearchHistoryAdapter.SearchHist
         val item = differ.currentList[position]
         holder.binding.setVariable(BR.model, item)
         holder.binding.imageviewDelete.setOnClickListener {
-
+            listener(item)
         }
     }
 

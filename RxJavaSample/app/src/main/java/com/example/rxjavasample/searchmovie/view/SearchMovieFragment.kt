@@ -3,6 +3,7 @@ package com.example.rxjavasample.searchmovie.view
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -44,15 +45,20 @@ class SearchMovieFragment : Fragment() {
     }
 
     private fun initView() {
-        searchHistoryAdapter = SearchHistoryAdapter()
+        searchHistoryAdapter = SearchHistoryAdapter { item ->
+            viewModel.deleteHistory(item)
+        }
         movieListAdapter = MovieListAdapter { item ->
             openMovieUrl(item)
         }
-
-        binding.recyclerviewNews.adapter = movieListAdapter
-        binding.recyclerviewNews.addItemDecoration(VerticalItemDecoration(10))
-        binding.recyclerviewSearchHistory.adapter = searchHistoryAdapter
-        binding.recyclerviewSearchHistory.addItemDecoration(VerticalItemDecoration(5))
+        binding.recyclerviewNews.apply {
+            adapter = movieListAdapter
+            addItemDecoration(VerticalItemDecoration(10))
+        }
+        binding.recyclerviewSearchHistory.apply {
+            adapter = searchHistoryAdapter
+            addItemDecoration(VerticalItemDecoration(5))
+        }
     }
 
     private fun searchMovie() {
@@ -80,17 +86,15 @@ class SearchMovieFragment : Fragment() {
 
     private fun loadSearchHistory() {
         viewModel.queryList.observe(viewLifecycleOwner, Observer {
-            if (!viewModel.queryList.value.isNullOrEmpty()) {
-                detectFocus()
-            }
+            searchHistoryAdapter.submitList(viewModel.queryList.value!!)
+            detectSearchViewFocus()
         })
     }
 
-    private fun  detectFocus() {
-        binding.edittextSearchNews.setOnFocusChangeListener{view, hasFocus ->
+    private fun detectSearchViewFocus() {
+        binding.edittextSearchNews.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 binding.recyclerviewSearchHistory.visibility = View.VISIBLE
-                searchHistoryAdapter.submitList(viewModel.queryList.value!!)
             } else {
                 binding.recyclerviewSearchHistory.visibility = View.GONE
             }

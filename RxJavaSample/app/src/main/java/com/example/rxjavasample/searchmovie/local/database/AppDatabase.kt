@@ -8,5 +8,4 @@ import com.example.rxjavasample.searchmovie.local.entity.SearchEntity
 @Database(entities = [SearchEntity::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getSearchDao(): SearchDao
-
 }

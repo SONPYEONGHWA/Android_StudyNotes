@@ -89,6 +89,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"
             android:background="@color/white"
+            android:layout_marginHorizontal="18dp"
             tools:listitem="@layout/item_search_history"
             app:layout_constraintTop_toBottomOf="@id/cardview_search"
             app:layout_constraintStart_toStartOf="@id/cardview_search"

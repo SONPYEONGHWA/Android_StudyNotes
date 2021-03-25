@@ -2,16 +2,18 @@ package com.example.rxjavasample.searchmovie.local.dao
 
 import androidx.room.*
 import com.example.rxjavasample.searchmovie.local.entity.SearchEntity
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Maybe
 
 @Dao
 interface SearchDao {
     @Query("SELECT * FROM search_history")
-    suspend fun getAll(): List<SearchEntity>
+    fun getAll(): Maybe<List<SearchEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(searchList: SearchEntity)
+    fun insert(searchList: SearchEntity)
 
     @Delete
-    suspend fun delete(searchEntity: SearchEntity)
-
+    fun delete(searchEntity: SearchEntity)
 }
