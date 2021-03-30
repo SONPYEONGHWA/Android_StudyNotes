@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+        <variable
+            name="model"
+            type="com.example.climateseoul.climateinfo.model.IotVdata.Row" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textview_org_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="25sp"
+            android:text="@{model.organizationName}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="기관 이름" />
+
+        <TextView
+            android:id="@+id/textview_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{model.registerDateTime}"
+            android:layout_marginStart="13dp"
+            app:layout_constraintTop_toTopOf="@id/textview_org_name"
+            app:layout_constraintStart_toEndOf="@id/textview_org_name"
+            app:layout_constraintBottom_toBottomOf="@id/textview_org_name"
+            tools:text="등록된 날짜"/>
+
+        <TextView
+            android:id="@+id/textview_fine_dust"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:text="@{@string/fine_dust(model.fineDust)}"
+            app:layout_constraintTop_toBottomOf="@id/textview_org_name"
+            app:layout_constraintStart_toStartOf="@id/textview_org_name"
+            tools:text="미세먼지 농도입니다."/>
+
+        <TextView
+            android:id="@+id/textview_hyper_fine_dust"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:text="@{@string/hyper_fine_dust(model.hyperFineDust)}"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/textview_fine_dust"
+            app:layout_constraintStart_toStartOf="@id/textview_fine_dust"
+            tools:text="초미세먼지 농도입니다."/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

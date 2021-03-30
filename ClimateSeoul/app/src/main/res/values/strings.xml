@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ClimateSeoul</string>
+    <string name="fine_dust">미세먼지 농도는 %s입니다.</string>
+    <string name="hyper_fine_dust">초미세먼지 농도는 %s 입니다.</string>
+</resources>
