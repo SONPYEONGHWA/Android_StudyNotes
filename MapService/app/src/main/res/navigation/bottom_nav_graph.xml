@@ -8,9 +8,10 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.example.mapservice.mapservice.map.MapFragment"
+        android:name="com.example.mapservice.mapservice.map.view.MapFragment"
         android:label="MapFragment"
         tools:layout="@layout/fragment_map"/>
+
     <fragment
         android:id="@+id/friendsListFragment"
         android:name="com.example.mapservice.mapservice.friendslist.ui.FriendsListFragment"
@@ -20,7 +21,9 @@
         android:id="@+id/myPageFragment"
         android:name="com.example.mapservice.mapservice.mypage.MyPageFragment"
         android:label="MyPageFragment"
-        tools:layout="@layout/fragment_my_page"/>
+        tools:layout="@layout/fragment_my_page">
+    </fragment>
+
     <fragment
         android:id="@+id/webSearchFragment"
         android:name="com.example.mapservice.mapservice.websearch.ui.WebSearchFragment"

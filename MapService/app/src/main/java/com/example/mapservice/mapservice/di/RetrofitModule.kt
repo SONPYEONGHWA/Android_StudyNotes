@@ -1,9 +1,8 @@
 package com.example.mapservice.mapservice.di
 
-import android.location.Geocoder
 import com.example.mapservice.BuildConfig
-import com.example.mapservice.mapservice.application.MapServiceApplication
 import com.example.mapservice.mapservice.friendslist.api.FriendsListService
+import com.example.mapservice.mapservice.map.data.source.SearchLocationService
 import com.example.mapservice.mapservice.websearch.api.KakaoHelper
 import com.example.mapservice.mapservice.websearch.api.KakaoHelperImpl
 import com.example.mapservice.mapservice.websearch.api.KakaoApiService
@@ -16,9 +15,10 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -29,9 +29,9 @@ object RetrofitModule {
     }
 
     private val baseClient = OkHttpClient.Builder()
-        .connectTimeout(20, TimeUnit.SECONDS)
+        .connectTimeout(10, TimeUnit.SECONDS)
         .writeTimeout(20, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(20, TimeUnit.SECONDS)
         .addInterceptor(loggingInterceptor)
         .build()
 
@@ -52,17 +52,19 @@ object RetrofitModule {
 
     @Provides
     @Singleton
+    @KakaoRetrofit
     fun provideKakaoRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.KAKAO_URL)
             .client(okHttpClient)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideKakaoApiService(retrofit: Retrofit): KakaoApiService {
+    fun provideKakaoApiService(@KakaoRetrofit retrofit: Retrofit): KakaoApiService {
         return retrofit.create(KakaoApiService::class.java)
     }
 
@@ -79,4 +81,14 @@ object RetrofitModule {
             .build()
         return retrofit.create(FriendsListService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideKakaoSearchLocationService(@KakaoRetrofit retrofit: Retrofit): SearchLocationService =
+        retrofit.create(SearchLocationService::class.java)
+
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class KakaoRetrofit
 }

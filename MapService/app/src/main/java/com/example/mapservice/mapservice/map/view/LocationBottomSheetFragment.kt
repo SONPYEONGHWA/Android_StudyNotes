@@ -1,19 +1,18 @@
-package com.example.mapservice.mapservice.map
+package com.example.mapservice.mapservice.map.view
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import com.example.mapservice.R
 import com.example.mapservice.databinding.FragmentLocationBottomSheetBinding
+import com.example.mapservice.mapservice.map.viewmodel.MapViewModel
+import com.example.mapservice.mapservice.map.adapter.LocationBottomSheetAdapter
+import com.example.mapservice.mapservice.map.model.LocationSearchResponse
+import com.example.mapservice.mapservice.map.model.LocationSelectedModel
 import com.example.mapservice.mapservice.utils.VerticalItemDecoration
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import net.daum.mf.map.api.MapView
 
 class LocationBottomSheetFragment() : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentLocationBottomSheetBinding
@@ -26,50 +25,37 @@ class LocationBottomSheetFragment() : BottomSheetDialogFragment() {
     ): View? {
         binding = FragmentLocationBottomSheetBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        updateSearchResult()
         initRecyclerView()
-        getLocationResultSearched()
-        updateBottomSheetData()
     }
 
     private fun initRecyclerView() {
         adapter = LocationBottomSheetAdapter {
-          viewModel.changeLocationSelected(it)
+            selectLocation(it)
             dismiss()
         }
-
         binding.recyclerviewLocation.adapter = adapter
         binding.recyclerviewLocation.addItemDecoration(VerticalItemDecoration(10))
     }
 
-    fun getLocationResultSearched() {
-        var recyclerViewList = mutableListOf<AddressModel>()
-        val resultList = viewModel.resultList
-
-        resultList.observe(viewLifecycleOwner, Observer {
-            for (i in resultList.value!!.indices) {
-                recyclerViewList.add(
-                    AddressModel(
-                        resultList.value!![i].getAddressLine(0).toString(),
-                        resultList.value!![i].latitude,
-                        resultList.value!![i].longitude
-                    )
-                )
-            }
-            viewModel.changeLocaitonResult(recyclerViewList)
+    private fun updateSearchResult() {
+        viewModel.resultList.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(it)
         })
     }
 
-    fun updateBottomSheetData() {
-        viewModel.locationResultSearched.observe(viewLifecycleOwner, Observer {
-            Log.e("Search Location List: ", it.toString())
-            adapter.submitList(it)
-        }
+    private fun selectLocation(document: LocationSearchResponse.Document) {
+        viewModel.changeLocationSelected(
+            LocationSelectedModel(
+                document.placeName,
+                document.phone,
+                document.longtitude.toDouble(),
+                document.latitude.toDouble()
+            )
         )
     }
 }

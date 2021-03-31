@@ -5,9 +5,11 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
+import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
 
 @BindingAdapter("setImageUrl")
@@ -18,9 +20,12 @@ fun setImageUrl(imageview: ImageView, url: String?) {
 }
 
 @BindingAdapter("android:text")
-fun getTextString(view: EditText, contet: String?) {
-    var old: String? = view.text.toString()
-    if (old != contet) view.setText(contet)
+fun setTextString(view: TextView, content: MutableLiveData<String>) {
+    if (content == null) {
+        view.text = ""
+    } else {
+        if (view.text.toString() != content.value) view.text = content.value
+    }
 }
 
 

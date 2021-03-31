@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.mapservice">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".mapservice.application.MapServiceApplication"
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MapService">
+        android:theme="@style/Theme.MapService"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".mapservice.SettingActivity"></activity>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="b6fd36460fac8ab90faf4098cc5ca49f"/>
+            android:value="b6fd36460fac8ab90faf4098cc5ca49f" />
 
         <activity android:name=".mapservice.MainActivity">
             <intent-filter>

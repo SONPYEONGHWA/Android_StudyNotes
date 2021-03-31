@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.mapservice.mapservice.map.MapViewModel" />
+            type="com.example.mapservice.mapservice.map.viewmodel.MapViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        tools:context=".mapservice.map.MapFragment">
+        tools:context=".mapservice.map.view.MapFragment">
 
         <RelativeLayout
             android:id="@+id/mapview"

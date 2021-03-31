@@ -1,32 +1,29 @@
-package com.example.mapservice.mapservice.map
+package com.example.mapservice.mapservice.map.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mapservice.BR
 import com.example.mapservice.databinding.ItemSearchAddressBinding
-import net.daum.mf.map.api.MapPOIItem
-import net.daum.mf.map.api.MapPoint
-import net.daum.mf.map.api.MapView
+import com.example.mapservice.mapservice.map.model.LocationSearchResponse
 
-class LocationBottomSheetAdapter(val listener: (AddressModel) -> Unit): RecyclerView.Adapter<LocationBottomSheetAdapter.LocationBottomSheetViewHolder>() {
+class LocationBottomSheetAdapter(val listener: (LocationSearchResponse.Document) -> Unit): RecyclerView.Adapter<LocationBottomSheetAdapter.LocationBottomSheetViewHolder>() {
 
-    val diffCallback = object : DiffUtil.ItemCallback<AddressModel>(){
-        override fun areItemsTheSame(oldItem: AddressModel, newItem: AddressModel): Boolean {
+    val diffCallback = object : DiffUtil.ItemCallback<LocationSearchResponse.Document>(){
+        override fun areItemsTheSame(oldItem: LocationSearchResponse.Document, newItem: LocationSearchResponse.Document): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: AddressModel, newItem: AddressModel): Boolean {
+        override fun areContentsTheSame(oldItem: LocationSearchResponse.Document, newItem: LocationSearchResponse.Document): Boolean {
             return oldItem.hashCode() == newItem.hashCode()
         }
     }
 
     val differ = AsyncListDiffer(this, diffCallback)
 
-    fun submitList(list: List<AddressModel>) = differ.submitList(list)
+    fun submitList(list: List<LocationSearchResponse.Document>) = differ.submitList(list)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
