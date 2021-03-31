@@ -53,8 +53,8 @@ class LocationBottomSheetFragment() : BottomSheetDialogFragment() {
             LocationSelectedModel(
                 document.placeName,
                 document.phone,
-                document.longtitude.toDouble(),
-                document.latitude.toDouble()
+                document.latitude.toDouble(),
+                document.longtitude.toDouble()
             )
         )
     }

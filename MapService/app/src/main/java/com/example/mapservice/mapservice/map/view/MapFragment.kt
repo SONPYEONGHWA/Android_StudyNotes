@@ -95,22 +95,22 @@ class MapFragment : Fragment() {
         viewModel.getLocationData().observe(viewLifecycleOwner, Observer { location ->
             binding.buttonMyLocation.setOnClickListener {
                 mapView.removeAllPOIItems()
-                setMarker("My Location", location.longtitude, location.latitude)
+                setMarker("My Location", location.latitude, location.longtitude)
+                moveCamera(location.latitude, location.longtitude)
             }
         })
     }
 
-    private fun setMarker(name: String, longtitude: Double, latitude: Double) {
+    private fun setMarker(name: String, latitude: Double, longtitude: Double) {
         val marker = MapPOIItem()
         marker.itemName = name
-        marker.mapPoint = MapPoint.mapPointWithGeoCoord(longtitude, latitude)
+        marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude, longtitude)
         marker.markerType = MapPOIItem.MarkerType.BluePin
         mapView.addPOIItem(marker)
     }
 
-    private fun moveCamera(longtitude: Double, latitude: Double) {
-        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(longtitude, latitude), true)
-
+    private fun moveCamera(latitude: Double, longtitude: Double) {
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude, longtitude), true)
     }
 
     private fun searchLocation() {
@@ -120,8 +120,8 @@ class MapFragment : Fragment() {
             viewModel.resultList.observe(viewLifecycleOwner, Observer{list ->
                 if (!bottomSheet.isAdded) bottomSheet.show(childFragmentManager, "bottomsheet")
                 list.forEach { document ->
-                    setMarker(document.placeName, document.longtitude.toDouble(), document.latitude.toDouble())
-                    moveCamera(document.longtitude.toDouble(), document.latitude.toDouble())
+                    setMarker(document.placeName, document.latitude.toDouble(), document.longtitude.toDouble())
+                    moveCamera(document.latitude.toDouble(), document.longtitude.toDouble())
                 }
             })
         }
@@ -130,8 +130,8 @@ class MapFragment : Fragment() {
     private fun markSearchedLocation() {
         viewModel.locationSelected.observe(viewLifecycleOwner, Observer {
             mapView.removeAllPOIItems()
-            setMarker(it.placeName,it.longtitude, it.latitude)
-            moveCamera(it.longtitude, it.latitude)
+            setMarker(it.placeName, it.latitude, it.longtitude)
+            moveCamera( it.latitude, it.longtitude)
         })
     }
 }

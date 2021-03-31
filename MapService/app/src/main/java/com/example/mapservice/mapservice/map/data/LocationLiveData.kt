@@ -65,6 +65,4 @@ class LocationLiveData(context: Context): LiveData<LocationModel>() {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
     }
-
-
 }

@@ -44,9 +44,9 @@ data class LocationSearchResponse(
         val placeUrl: String,
         @SerializedName("road_address_name")
         val roadAddressName: String,
-        @SerializedName("y")
-        val longtitude: String,
         @SerializedName("x")
+        val longtitude: String,
+        @SerializedName("y")
         val latitude: String
     )
 }
