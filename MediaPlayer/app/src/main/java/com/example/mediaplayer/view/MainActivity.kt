@@ -1,4 +1,4 @@
-package com.example.mediaplayer
+package com.example.mediaplayer.view
 
 import android.content.pm.PackageManager
 import android.os.Build
@@ -9,20 +9,24 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.mediaplayer.*
+import com.example.mediaplayer.adapter.GalleryAdapter
+import com.example.mediaplayer.data.model.SelectedImageModel
 import com.example.mediaplayer.databinding.ActivityMainBinding
+import com.example.mediaplayer.utils.HorizontalItemDecoration
+import com.example.mediaplayer.utils.VerticalItemDecoration
+import com.example.mediaplayer.viewModel.ImageViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(){
+@AndroidEntryPoint
+class MainActivity: AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var galleryAdapter: GalleryAdapter
     private val viewModel: ImageViewModel by viewModels()
-    val STORAGE_PERMISSION = arrayOf(
-        android.Manifest.permission.READ_EXTERNAL_STORAGE,
-        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,13 +45,18 @@ class MainActivity : AppCompatActivity(){
             addItemDecoration(VerticalItemDecoration(10))
             adapter = galleryAdapter
         }
-
     }
 
     private fun selectPictures() {
         if (checkPermission(STORAGE_PERMISSION, MULTIPLE_PERMISSION_CODE)) {
             getImages()
         }
+    }
+
+    private fun getImages() {
+        viewModel.galleryLiveData.observe(this, Observer {
+            galleryAdapter.submitList(it)
+        })
     }
 
     //권한처리 메서드
@@ -86,24 +95,12 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
-    private fun getImages() {
-        val config = PagedList.Config.Builder()
-            .setInitialLoadSizeHint(20)
-            .setPageSize(20)
-            .setEnablePlaceholders(false)
-            .build()
-
-        val galleryDataSource = DataSourceFactory(this.contentResolver)
-        val galleryLiveData = LivePagedListBuilder(galleryDataSource, config).build()
-
-        galleryLiveData.observe(this, Observer {
-            galleryAdapter.submitList(it)
-        })
-    }
-
     companion object {
         private const val MULTIPLE_PERMISSION_CODE = 100
-        private const val PICK_IMAGES_CODE = 300
+        val STORAGE_PERMISSION = arrayOf(
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
     }
 }
 
