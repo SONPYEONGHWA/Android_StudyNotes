@@ -1,24 +1,27 @@
 package com.example.mediaplayer.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.example.mediaplayer.data.repository.GalleryRepository
 import com.example.mediaplayer.data.model.ImageModel
-import com.example.mediaplayer.data.source.DataSourceFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class ImageViewModel @Inject constructor(
-    private val galleryDataSource: DataSourceFactory
+    private val galleryRepository: GalleryRepository
 ) : ViewModel() {
 
-    private val config = PagedList.Config.Builder()
-        .setInitialLoadSizeHint(20)
-        .setPageSize(20)
-        .setEnablePlaceholders(false)
-        .build()
+    val galleryLiveData: LiveData<PagedList<ImageModel>> =
+        galleryRepository.getImageList()
 
-    val galleryLiveData = LivePagedListBuilder(galleryDataSource, config).build()
+    private val _imageList = MutableLiveData<List<ImageModel>>()
+    val imageList: LiveData<List<ImageModel>>
+    get() = _imageList
+
+    fun changeImageList(list: List< ImageModel>){
+        _imageList.value = list
+    }
 }

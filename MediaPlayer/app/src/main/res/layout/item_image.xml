@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
             name="data"
@@ -28,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
+                colorFilter="@{data.isSelected}"
                 uploadImage="@{data.imageDataPath}" />
 
         </androidx.cardview.widget.CardView>
@@ -36,11 +37,12 @@
             android:id="@+id/imageview_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:background="@drawable/round_btn_heart_2"
+            selectedMarker="@{data.isSelected}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:elevation="2dp"/>
+            android:elevation="2dp"
+            tools:src ="@drawable/round_btn_heart_2"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

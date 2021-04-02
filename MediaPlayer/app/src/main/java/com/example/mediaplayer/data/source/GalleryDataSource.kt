@@ -1,7 +1,9 @@
 package com.example.mediaplayer.data.source
 
 import android.content.ContentResolver
+import android.content.ContentUris
 import android.net.Uri
+import android.net.Uri.withAppendedPath
 import android.provider.MediaStore
 import android.util.Log
 import androidx.paging.PositionalDataSource
@@ -14,17 +16,17 @@ import javax.inject.Inject
 class GalleryDataSource @Inject constructor(
     private val contentResolver: ContentResolver
     ): PositionalDataSource<ImageModel>() {
+    private val images = mutableListOf<ImageModel>()
 
     override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<ImageModel>) {
-        callback.onResult(getImages(params.requestedLoadSize, params.requestedStartPosition),0)
+        callback.onResult(getImages(),0)
     }
 
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<ImageModel>) {
-        callback.onResult(getImages(params.loadSize, params.startPosition))
+        callback.onResult(getImages())
     }
 
-    private fun getImages(limit: Int, offset: Int): MutableList<ImageModel> {
-        val images = mutableListOf<ImageModel>()
+    private fun getImages(): MutableList<ImageModel> {
 
         val projection = arrayOf(
             MediaStore.Images.Media._ID,
@@ -49,19 +51,20 @@ class GalleryDataSource @Inject constructor(
         )
 
         cursor?.use {
-            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-            val dateTakenColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
-            val displayNameColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
+            val idColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+            val dateTakenColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
+            val displayNameColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
 
-            while (cursor.moveToNext()){
-                val id = cursor.getLong(idColumn)
-                val dateTaken = Date(cursor.getLong(dateTakenColumn))
-                val displayName = cursor.getString(displayNameColumn)
-                val contentUri = Uri.withAppendedPath(
+            while (it.moveToNext()){
+                val id = it.getLong(idColumn)
+                val dateTaken = Date(it.getLong(dateTakenColumn))
+                val displayName = it.getString(displayNameColumn)
+                val contentUri = ContentUris.withAppendedId(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    id.toString()
+                    id
                 )
-                images.add(ImageModel(contentUri, id))
+                Log.d("images", "id : $id, contentUri: $contentUri, diplayName: $displayName")
+                images.add(ImageModel(contentUri, dateTaken, displayName, id, false))
             }
         }
         return images

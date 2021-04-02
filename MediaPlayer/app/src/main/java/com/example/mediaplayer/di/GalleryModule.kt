@@ -2,7 +2,7 @@ package com.example.mediaplayer.di
 
 import android.content.ContentResolver
 import android.content.Context
-import com.example.mediaplayer.data.model.SelectedImageModel
+import com.example.mediaplayer.data.repository.GalleryRepository
 import com.example.mediaplayer.data.source.DataSourceFactory
 import com.example.mediaplayer.data.source.GalleryDataSource
 import dagger.Module
@@ -30,5 +30,5 @@ object GalleryModule {
 
     @Provides
     @Singleton
-    fun provideSelectedList() = SelectedImageModel()
+    fun provideGalleryRepository(dataSource: DataSourceFactory) = GalleryRepository(dataSource)
 }

@@ -3,7 +3,10 @@ package com.example.mediaplayer.view
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.text.Selection
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,20 +15,21 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.mediaplayer.*
 import com.example.mediaplayer.adapter.GalleryAdapter
-import com.example.mediaplayer.data.model.SelectedImageModel
+import com.example.mediaplayer.data.model.ImageModel
 import com.example.mediaplayer.databinding.ActivityMainBinding
 import com.example.mediaplayer.utils.HorizontalItemDecoration
+import com.example.mediaplayer.utils.SelectionManager
 import com.example.mediaplayer.utils.VerticalItemDecoration
 import com.example.mediaplayer.viewModel.ImageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity: AppCompatActivity(){
     private lateinit var binding: ActivityMainBinding
     private lateinit var galleryAdapter: GalleryAdapter
     private val viewModel: ImageViewModel by viewModels()
+    private val selectionManager = SelectionManager()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +43,7 @@ class MainActivity: AppCompatActivity(){
 
     private fun initRecyclerview() {
         galleryAdapter = GalleryAdapter()
+
         binding.recyclerviewImages.apply {
             layoutManager = GridLayoutManager(this@MainActivity, 3)
             addItemDecoration(HorizontalItemDecoration(10))
@@ -54,8 +59,20 @@ class MainActivity: AppCompatActivity(){
     }
 
     private fun getImages() {
-        viewModel.galleryLiveData.observe(this, Observer {
-            galleryAdapter.submitList(it)
+        viewModel.galleryLiveData.observe(this, Observer { list ->
+            galleryAdapter.submitList(list)
+            viewModel.changeImageList(list)
+        })
+
+        galleryAdapter.setItemClickListener(object : GalleryAdapter.OnItemClickListener{
+            override fun onClick(v: View, position: Int) {
+                val list = viewModel.imageList.value!!
+                val image = list[position]
+//                selectionManager.toggle(image)
+                image!!.isSelected = !image!!.isSelected
+                Log.e("image", image.isSelected.toString())
+
+            }
         })
     }
 
