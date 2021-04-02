@@ -6,7 +6,7 @@ import java.util.*
 
 data class ImageModel(
     val imageDataPath: Uri,
-    val dateTaken : Date,
+    val dateTaken : Long,
     val displayName: String,
     val id: Long,
     var isSelected: Boolean

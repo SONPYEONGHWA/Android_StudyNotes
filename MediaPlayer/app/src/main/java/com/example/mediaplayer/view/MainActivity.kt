@@ -3,25 +3,24 @@ package com.example.mediaplayer.view
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.text.Selection
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.mediaplayer.*
 import com.example.mediaplayer.adapter.GalleryAdapter
-import com.example.mediaplayer.data.model.ImageModel
 import com.example.mediaplayer.databinding.ActivityMainBinding
 import com.example.mediaplayer.utils.HorizontalItemDecoration
 import com.example.mediaplayer.utils.SelectionManager
 import com.example.mediaplayer.utils.VerticalItemDecoration
 import com.example.mediaplayer.viewModel.ImageViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -41,8 +40,20 @@ class MainActivity: AppCompatActivity(){
         selectPictures()
     }
 
+    override fun onResume() {
+        super.onResume()
+        galleryAdapter.snapshot().items.forEach {
+            //Todo: notifyData다른 방법 생각해보기
+            galleryAdapter.notifyDataSetChanged()
+            it.isSelected = false
+        }
+    }
+
     private fun initRecyclerview() {
-        galleryAdapter = GalleryAdapter()
+        galleryAdapter = GalleryAdapter{ image ->
+            image!!.isSelected = !image!!.isSelected
+            Log.e("image", image.isSelected.toString())
+        }
 
         binding.recyclerviewImages.apply {
             layoutManager = GridLayoutManager(this@MainActivity, 3)
@@ -59,21 +70,21 @@ class MainActivity: AppCompatActivity(){
     }
 
     private fun getImages() {
-        viewModel.galleryLiveData.observe(this, Observer { list ->
-            galleryAdapter.submitList(list)
-            viewModel.changeImageList(list)
-        })
-
-        galleryAdapter.setItemClickListener(object : GalleryAdapter.OnItemClickListener{
-            override fun onClick(v: View, position: Int) {
-                val list = viewModel.imageList.value!!
-                val image = list[position]
-//                selectionManager.toggle(image)
-                image!!.isSelected = !image!!.isSelected
-                Log.e("image", image.isSelected.toString())
-
+        lifecycleScope.launch {
+            viewModel.galleryLiveData().collect{ pagingData ->
+                galleryAdapter.submitData(pagingData)
+                viewModel.changeImageList(galleryAdapter.snapshot().items)
             }
-        })
+        }
+
+//        galleryAdapter.setItemClickListener(object : GalleryAdapter.OnItemClickListener{
+//            override fun onClick(v: View, position: Int) {
+//                val list = viewModel.imageList.value!!
+//                val image = list[position]
+//                image!!.isSelected = !image!!.isSelected
+//                Log.e("image", image.isSelected.toString())
+//            }
+//        })
     }
 
     //권한처리 메서드
@@ -111,6 +122,7 @@ class MainActivity: AppCompatActivity(){
             }
         }
     }
+
 
     companion object {
         private const val MULTIPLE_PERMISSION_CODE = 100

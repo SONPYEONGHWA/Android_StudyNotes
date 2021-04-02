@@ -3,7 +3,6 @@ package com.example.mediaplayer.di
 import android.content.ContentResolver
 import android.content.Context
 import com.example.mediaplayer.data.repository.GalleryRepository
-import com.example.mediaplayer.data.source.DataSourceFactory
 import com.example.mediaplayer.data.source.GalleryDataSource
 import dagger.Module
 import dagger.Provides
@@ -26,9 +25,5 @@ object GalleryModule {
 
     @Provides
     @Singleton
-    fun provideGalleryDataSourceFactory(galleryDataSource: GalleryDataSource): DataSourceFactory = DataSourceFactory(galleryDataSource)
-
-    @Provides
-    @Singleton
-    fun provideGalleryRepository(dataSource: DataSourceFactory) = GalleryRepository(dataSource)
+    fun provideGalleryRepository(galleryDataSource: GalleryDataSource) = GalleryRepository(galleryDataSource)
 }

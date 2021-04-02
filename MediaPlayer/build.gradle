@@ -7,7 +7,7 @@ buildscript {
         lifecycle_version = "2.2.0"
         room_version = "2.3.0-alpha04"
         dagger_version = "2.32-alpha"
-        paging_version = "2.1.2"
+        paging_version = "3.0.0-alpha13"
     }
 
     repositories {
