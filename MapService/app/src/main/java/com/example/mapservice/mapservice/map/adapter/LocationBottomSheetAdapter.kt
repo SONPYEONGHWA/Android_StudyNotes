@@ -2,28 +2,16 @@ package com.example.mapservice.mapservice.map.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mapservice.BR
 import com.example.mapservice.databinding.ItemSearchAddressBinding
-import com.example.mapservice.mapservice.map.model.LocationSearchResponse
+import com.example.mapservice.mapservice.map.data.entity.LocationEntity
 
-class LocationBottomSheetAdapter(val listener: (LocationSearchResponse.Document) -> Unit): RecyclerView.Adapter<LocationBottomSheetAdapter.LocationBottomSheetViewHolder>() {
-
-    val diffCallback = object : DiffUtil.ItemCallback<LocationSearchResponse.Document>(){
-        override fun areItemsTheSame(oldItem: LocationSearchResponse.Document, newItem: LocationSearchResponse.Document): Boolean {
-            return oldItem == newItem
-        }
-
-        override fun areContentsTheSame(oldItem: LocationSearchResponse.Document, newItem: LocationSearchResponse.Document): Boolean {
-            return oldItem.hashCode() == newItem.hashCode()
-        }
-    }
-
-    val differ = AsyncListDiffer(this, diffCallback)
-
-    fun submitList(list: List<LocationSearchResponse.Document>) = differ.submitList(list)
+class LocationBottomSheetAdapter(val listener: (LocationEntity) -> Unit): ListAdapter<LocationEntity, LocationBottomSheetAdapter.LocationBottomSheetViewHolder>(
+    diffCallback
+) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -34,7 +22,7 @@ class LocationBottomSheetAdapter(val listener: (LocationSearchResponse.Document)
     }
 
     override fun onBindViewHolder(holder: LocationBottomSheetViewHolder, position: Int) {
-        val item = differ.currentList[position]
+        val item = currentList[position]
         holder.binding.setVariable(BR.model, item)
 
         holder.binding.constraintlayoutItemLocation.setOnClickListener {
@@ -42,7 +30,17 @@ class LocationBottomSheetAdapter(val listener: (LocationSearchResponse.Document)
         }
     }
 
-    override fun getItemCount() = differ.currentList.size
+    companion object {
+        val diffCallback = object : DiffUtil.ItemCallback<LocationEntity>(){
+            override fun areItemsTheSame(oldItem: LocationEntity, newItem: LocationEntity): Boolean {
+                return oldItem == newItem
+            }
 
-    inner class LocationBottomSheetViewHolder(val binding: ItemSearchAddressBinding): RecyclerView.ViewHolder(binding.root)
+            override fun areContentsTheSame(oldItem: LocationEntity, newItem: LocationEntity): Boolean {
+                return oldItem.hashCode() == newItem.hashCode()
+            }
+        }
+    }
+
+    class LocationBottomSheetViewHolder(val binding: ItemSearchAddressBinding): RecyclerView.ViewHolder(binding.root)
 }

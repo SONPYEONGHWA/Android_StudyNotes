@@ -116,15 +116,19 @@ class MapFragment : Fragment() {
     private fun searchLocation() {
         binding.buttonSearchAddress.setOnClickListener {
             viewModel.searchLocation()
-            mapView.removeAllPOIItems()
-            viewModel.resultList.observe(viewLifecycleOwner, Observer{list ->
-                if (!bottomSheet.isAdded) bottomSheet.show(childFragmentManager, "bottomsheet")
-                list.forEach { document ->
-                    setMarker(document.placeName, document.latitude.toDouble(), document.longtitude.toDouble())
-                    moveCamera(document.latitude.toDouble(), document.longtitude.toDouble())
-                }
-            })
+            showLocationResult()
         }
+    }
+
+    private fun showLocationResult() {
+        mapView.removeAllPOIItems()
+        viewModel.resultList.observe(viewLifecycleOwner, Observer{list ->
+            if (!bottomSheet.isAdded) bottomSheet.show(childFragmentManager, "bottomsheet")
+            list.forEach { document ->
+                setMarker(document.placeName, document.latitude, document.longtitude)
+                moveCamera(document.latitude, document.longtitude)
+            }
+        })
     }
 
     private fun markSearchedLocation() {

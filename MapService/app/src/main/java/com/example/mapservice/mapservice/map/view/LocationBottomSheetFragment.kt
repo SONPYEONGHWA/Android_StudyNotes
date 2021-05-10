@@ -9,14 +9,11 @@ import androidx.lifecycle.Observer
 import com.example.mapservice.databinding.FragmentLocationBottomSheetBinding
 import com.example.mapservice.mapservice.map.viewmodel.MapViewModel
 import com.example.mapservice.mapservice.map.adapter.LocationBottomSheetAdapter
-import com.example.mapservice.mapservice.map.model.LocationSearchResponse
-import com.example.mapservice.mapservice.map.model.LocationSelectedModel
 import com.example.mapservice.mapservice.utils.VerticalItemDecoration
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class LocationBottomSheetFragment() : BottomSheetDialogFragment() {
     private lateinit var binding: FragmentLocationBottomSheetBinding
-    private lateinit var adapter: LocationBottomSheetAdapter
     private val viewModel: MapViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -34,28 +31,19 @@ class LocationBottomSheetFragment() : BottomSheetDialogFragment() {
     }
 
     private fun initRecyclerView() {
-        adapter = LocationBottomSheetAdapter {
-            selectLocation(it)
-            dismiss()
+
+        binding.recyclerviewLocation.apply {
+            adapter = LocationBottomSheetAdapter {
+                viewModel.changeLocationSelected(it)
+                dismiss()
+            }
+            addItemDecoration(VerticalItemDecoration(10))
         }
-        binding.recyclerviewLocation.adapter = adapter
-        binding.recyclerviewLocation.addItemDecoration(VerticalItemDecoration(10))
     }
 
     private fun updateSearchResult() {
         viewModel.resultList.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
+            (binding.recyclerviewLocation.adapter as LocationBottomSheetAdapter).submitList(it)
         })
-    }
-
-    private fun selectLocation(document: LocationSearchResponse.Document) {
-        viewModel.changeLocationSelected(
-            LocationSelectedModel(
-                document.placeName,
-                document.phone,
-                document.latitude.toDouble(),
-                document.longtitude.toDouble()
-            )
-        )
     }
 }

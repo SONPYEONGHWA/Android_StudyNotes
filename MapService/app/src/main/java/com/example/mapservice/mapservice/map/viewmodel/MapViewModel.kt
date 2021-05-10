@@ -7,10 +7,9 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.mapservice.mapservice.map.data.entity.LocationEntity
 import com.example.mapservice.mapservice.map.data.LocationLiveData
 import com.example.mapservice.mapservice.map.data.repository.LocationRepository
-import com.example.mapservice.mapservice.map.model.LocationSearchResponse
-import com.example.mapservice.mapservice.map.model.LocationSelectedModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -23,15 +22,15 @@ class MapViewModel @ViewModelInject constructor(
     private val locationData = LocationLiveData(context)
     fun getLocationData() = locationData
 
-    private val _resultList = MutableLiveData<List<LocationSearchResponse.Document>>()
-    val resultList: LiveData<List<LocationSearchResponse.Document>>
+    private val _resultList = MutableLiveData<List<LocationEntity>>()
+    val resultList: LiveData<List<LocationEntity>>
         get() = _resultList
 
-    private val _locationSelected = MutableLiveData<LocationSelectedModel>()
-    val locationSelected: LiveData<LocationSelectedModel>
+    private val _locationSelected = MutableLiveData<LocationEntity>()
+    val locationSelected: LiveData<LocationEntity>
         get() = _locationSelected
 
-    fun changeLocationSelected(location: LocationSelectedModel) {
+    fun changeLocationSelected(location: LocationEntity) {
         _locationSelected.value = location
     }
 
@@ -43,8 +42,8 @@ class MapViewModel @ViewModelInject constructor(
         locationRepository.getLocationSearched(searchAddressQuery.value!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ resopnse ->
-                _resultList.postValue(resopnse.documents)
+            .subscribe({ locations ->
+                _resultList.postValue(locations)
             }, {
                 it.printStackTrace()
             })

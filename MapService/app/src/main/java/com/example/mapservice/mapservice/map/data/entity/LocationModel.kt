@@ -1,4 +1,4 @@
-package com.example.mapservice.mapservice.map.model
+package com.example.mapservice.mapservice.map.data.entity
 
 data class LocationModel(
     val latitude: Double,

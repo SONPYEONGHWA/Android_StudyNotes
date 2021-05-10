@@ -1,9 +1,10 @@
-package com.example.mapservice.mapservice.map.model
+package com.example.mapservice.mapservice.map.data.dto
 
+import com.example.mapservice.mapservice.map.data.entity.LocationEntity
 import com.google.gson.annotations.SerializedName
 
 
-data class LocationSearchResponse(
+data class ResponseLocation(
     val meta: Meta,
     val documents: List<Document>
 ) {
@@ -48,5 +49,15 @@ data class LocationSearchResponse(
         val longtitude: String,
         @SerializedName("y")
         val latitude: String
-    )
+    ){
+        fun toLocationEntity(): LocationEntity {
+            return LocationEntity(
+                placeName = placeName,
+                addressName = addressName,
+                phoneNumber = phone,
+                latitude = latitude.toDouble(),
+                longtitude = longtitude.toDouble()
+            )
+        }
+    }
 }
