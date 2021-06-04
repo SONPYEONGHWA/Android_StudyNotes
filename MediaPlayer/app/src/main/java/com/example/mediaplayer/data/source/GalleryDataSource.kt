@@ -21,11 +21,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-
 class GalleryDataSource @Inject constructor(
     private val contentResolver: ContentResolver
     ): PagingSource<Int, ImageModel>() {
     private val images = mutableListOf<ImageModel>()
+
     override fun getRefreshKey(state: PagingState<Int, ImageModel>): Int? {
         return state.anchorPosition
     }
@@ -39,6 +39,7 @@ class GalleryDataSource @Inject constructor(
             if (pagedKeyDate == lastItemDate) {
                 return LoadResult.Error(Throwable())
             }
+
             LoadResult.Page(
                 data = images,
                 prevKey = null,
@@ -49,41 +50,36 @@ class GalleryDataSource @Inject constructor(
         }
     }
 
-    //    override fun loadInitial(params: LoadInitialParams, callback: LoadInitialCallback<ImageModel>) {
-//        callback.onResult(getImages(),0)
-//    }
-//
-//    override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<ImageModel>) {
-//        callback.onResult(getImages())
-//    }
-
-    suspend fun getImages()= withContext(Dispatchers.IO) {
+    private suspend fun getImages() = withContext(Dispatchers.IO) {
         val projection = arrayOf(
             MediaStore.Images.Media._ID,
             MediaStore.Images.Media.DISPLAY_NAME,
-            MediaStore.Images.Media.DATE_TAKEN
+            MediaStore.Images.Media.DATE_TAKEN,
+            MediaStore.Images.Media.BUCKET_DISPLAY_NAME
         )
 
-        val selection = "${MediaStore.Images.Media.DATE_TAKEN} >= ?"
-        val selectionArgs = arrayOf(
-            dateToTimestamp(
-            day = 1, month = 1, year = 1970
-        ).toString()
-        )
+//        val selection = "${MediaStore.Images.Media.DATE_TAKEN} >= ?"
+//
+//        val selectionArgs = arrayOf(
+//            dateToTimestamp(
+//            day = 1, month = 1, year = 1970
+//            ).toString()
+//        )
 
         val sortOrder = "${MediaStore.Images.Media.DATE_TAKEN} DESC"
         val cursor = contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             projection,
-            selection,
-            selectionArgs,
+            null,
+            null,
             sortOrder
         )
 
         cursor?.use {
-            val idColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-            val dateTakenColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
-            val displayNameColumn = it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
+            val idColumn = it.getColumnIndexOrThrow(projection[0])
+            val displayNameColumn = it.getColumnIndexOrThrow(projection[1])
+            val dateTakenColumn = it.getColumnIndexOrThrow(projection[2])
+            val bucketDisplayName = it.getColumnIndexOrThrow(projection[3])
 
             while (it.moveToNext()){
                 val id = it.getLong(idColumn)
@@ -93,10 +89,13 @@ class GalleryDataSource @Inject constructor(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     id
                 )
-                Log.d("images", "id : $id, contentUri: $contentUri, diplayName: $displayName")
-                images.add(ImageModel(contentUri, dateTaken, displayName, id, false))
+                val bucketId = it.getString(bucketDisplayName)
+
+                Log.d("images", "id : $id, contentUri: $contentUri, diplayName: $displayName, folder: $bucketId")
+                images.add(ImageModel(contentUri, dateTaken, displayName, id, bucketDisplayName.toString()))
             }
         }
+        cursor?.close()
         images
     }
 
@@ -104,5 +103,4 @@ class GalleryDataSource @Inject constructor(
         SimpleDateFormat("dd.MM.yyyy").let { formatter ->
             formatter.parse("$day.$month.$year")?.time ?: 0
         }
-
 }

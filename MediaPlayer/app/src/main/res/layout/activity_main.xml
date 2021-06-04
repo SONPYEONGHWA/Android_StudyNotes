@@ -44,8 +44,5 @@
             app:layout_constraintStart_toStartOf="@id/recyclerview_images"
             app:layout_constraintEnd_toEndOf="@id/recyclerview_images"/>
 
-
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

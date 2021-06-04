@@ -6,8 +6,8 @@ import java.util.*
 
 data class ImageModel(
     val imageDataPath: Uri,
-    val dateTaken : Long,
+    val dateTaken: Long?,
     val displayName: String,
     val id: Long,
-    var isSelected: Boolean
+    val bucketDisplayName: String
 )
