@@ -38,7 +38,6 @@ class MapViewModel @ViewModelInject constructor(
 
     @SuppressLint("CheckResult")
     fun searchLocation() {
-        Log.e("query ", searchAddressQuery.value!!)
         locationRepository.getLocationSearched(searchAddressQuery.value!!)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
